@@ -64,20 +64,23 @@ class Tree {
     }
 
     find(data, node = this.root) {
-        if(node === null || data === node.data) {
-            return node
-        } else if(data > node.data) {
-            node.right = this.find(data, node.right)
-        } else if(data < node.data) {
-            node.left = this.find(data, node.left)
+        if(node === null) {
+            return 'Does not exist!'
+        } else {
+            if(data === node.data) {
+                return node
+            } else if(data > node.data) {
+                return this.find(data, node.right)
+            } else if(data < node.data) {
+                return this.find(data, node.left)    
+            }
         }
     }
 }
-
 
 let test = new Tree([7, 1, 9, 8, 7, 6, 8, 5])
 console.log(removeDuplicates([7, 1, 9, 8, 7, 6, 8, 5]))
 test.insert(4)
 console.log(test)
-console.log(test.find(7))
+console.log(test.find(10))
 
