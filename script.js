@@ -26,7 +26,7 @@ function removeDuplicates(array) {
 }
 
 class Node {
-    constructor(data, right = null, left = null) {
+    constructor(data = null, right = null, left = null) {
         this.data = data;
         this.left = left;
         this.right = right;
@@ -49,9 +49,35 @@ class Tree {
 
         return root;
     }
+    
+    insert(data, node = this.root) {
+        if(node === null) {
+            return new Node(data)
+        } else {
+            if(data > node.data) {
+                node.right = this.insert(data, node.right)
+            } else {
+                node.left = this.insert(data, node.left)
+            }
+        }
+        return node;
+    }
+
+    find(data, node = this.root) {
+        if(node === null || data === node.data) {
+            return node
+        } else if(data > node.data) {
+            node.right = this.find(data, node.right)
+        } else if(data < node.data) {
+            node.left = this.find(data, node.left)
+        }
+    }
 }
 
 
-let test = new Tree([1, 5, 3, 3])
+let test = new Tree([7, 1, 9, 8, 7, 6, 8, 5])
+console.log(removeDuplicates([7, 1, 9, 8, 7, 6, 8, 5]))
+test.insert(4)
 console.log(test)
+console.log(test.find(7))
 
