@@ -63,6 +63,37 @@ class Tree {
         return node;
     }
 
+    delete(data) {
+        this.root = this.deleteNode(this.root, data)
+    }
+
+    deleteNode(node, data) {
+        if(node === null) {
+            return root
+        }
+        if(data < node.data) {
+            node.left = this.deleteNode(node.left, data)
+        } else if(data > node.data) {
+            node.right = this.deleteNode(node.right, data)
+        } else {
+            if(node.left === null) {
+                return node.right
+            } else if(node.right === null) {
+                return node.left
+            }
+            node.data = this.min(node.right)
+            node.right = null
+        }
+        return node
+    }
+
+    min(node = this.root) {
+        while(node.left) {
+            node = node.left
+        }
+        return node.data
+    }
+
     find(data, node = this.root) {
         if(node === null) {
             return 'Does not exist!'
@@ -117,15 +148,85 @@ class Tree {
         }
         return array;
     }
+
+    height(node = this.root) {
+        if(node === null || !node.left && !node.right) {
+            return 0
+        } else {
+            if(this.height(node.left) > this.height(node.right)) {
+                return this.height(node.left) + 1
+            } else {
+                return this.height(node.right) + 1
+            }
+        }
+    }
     
+    minHeight(node = this.root, height = 0) {
+        if(node === null || !node.left && !node.right) {
+            return height
+        } else {
+            if(this.minHeight(node.left) < this.minHeight(node.right)) {
+                return this.minHeight(node.left, height+1)
+            } else {
+                return this.minHeight(node.right, height+1)
+            }
+        }
+    }
     
+    depth(node, root = this.root, depth = 0) {
+        if(root === null) {
+            return
+        } 
+        if(node === root.data) {
+            return depth;
+        } else {
+            if(node < root.data) {
+                return this.depth(node, root.left, depth+1)
+            } else {
+                return this.depth(node, root.right, depth+1)
+            }
+        }
+    }
+
+    isBalanced() {
+        return(this.height()-this.minHeight() <= 1)
+    }
+
+    rebalance() {
+        let sorted = removeDuplicates(this.preOrder());
+        this.root = this.buildTree(sorted);
+        return this.root
+    }
+    
+    prettyPrint(node = this.root, prefix = '', isLeft = true) {
+        if (node === null) {
+           return;
+        }
+        if (node.right !== null) {
+          this.prettyPrint(node.right, `${prefix}${isLeft ? '│   ' : '    '}`, false);
+        }
+        console.log(`${prefix}${isLeft ? '└── ' : '┌── '}${node.data}`);
+        if (node.left !== null) {
+          this.prettyPrint(node.left, `${prefix}${isLeft ? '    ' : '│   '}`, true);
+        }
+      }
 }
 
-let test = new Tree([7, 1, 9, 8, 7, 6, 8, 5])
-console.log(removeDuplicates([7, 1, 9, 8, 7, 6, 8, 5]))
-
+let test = new Tree([67, 76, 59, 29, 63, 5, 16, 1, 6, 92])
 console.log(test)
-console.log(test.levelOrder())
+test.prettyPrint()
+console.log(test.isBalanced())
 console.log(test.preOrder())
-console.log(test.inOrder())
 console.log(test.postOrder())
+console.log(test.inOrder())
+test.insert(101)
+test.insert(781)
+test.insert(604)
+test.prettyPrint()
+console.log(test.isBalanced())
+console.log(test.rebalance())
+test.prettyPrint()
+console.log(test.isBalanced())
+console.log(test.preOrder())
+console.log(test.postOrder())
+console.log(test.inOrder())
