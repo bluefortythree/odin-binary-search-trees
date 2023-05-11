@@ -76,11 +76,56 @@ class Tree {
             }
         }
     }
+
+    levelOrder(array = [], queue = [this.root]) {
+        while(queue.length > 0) {
+            let current = queue.shift()
+            array.push(current.data)
+            if(current.left) {
+                queue.push(current.left)
+            }
+            if(current.right) {
+                queue.push(current.right)
+            }
+        }
+        return array
+    }
+
+    preOrder(node = this.root, array = []) {
+        if(node) {
+            array.push(node.data)
+            this.preOrder(node.left, array)
+            this.preOrder(node.right, array)
+        }
+        return array;
+    }
+
+    inOrder(node = this.root, array = []) {
+        if(node) {
+            this.inOrder(node.left, array)
+            array.push(node.data)
+            this.inOrder(node.right, array)
+        }
+        return array;
+    }
+
+    postOrder(node = this.root, array = []) {
+        if(node) {
+            this.postOrder(node.left, array)
+            this.postOrder(node.right, array)
+            array.push(node.data)
+        }
+        return array;
+    }
+    
+    
 }
 
 let test = new Tree([7, 1, 9, 8, 7, 6, 8, 5])
 console.log(removeDuplicates([7, 1, 9, 8, 7, 6, 8, 5]))
-test.insert(4)
-console.log(test)
-console.log(test.find(10))
 
+console.log(test)
+console.log(test.levelOrder())
+console.log(test.preOrder())
+console.log(test.inOrder())
+console.log(test.postOrder())
